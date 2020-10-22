@@ -41,9 +41,10 @@ def writeGMSH(filename_base, ref, Q, TriFlag, E, V, nLE, NC, nWK, nWB, nr):
     #----------------#
 
     # Airfoil
-    BC = 1
+    Entity = 0
+    PhysicalBC = 1001
     for i in range(int((nLE-1)/Q)):
-        f.write(str(i+1) + ' ' + str(GmshLineType) + ' 2 ' + str(BC) + ' 0 ')
+        f.write(str(i+1) + ' ' + str(GmshLineType) + ' 2 ' + str(PhysicalBC) + ' ' + str(Entity) + ' ')
         #Write end points
         f.write(str(NC[nWK-1+Q*i,0]) + ' ' + str(NC[nWK-1+Q*(i+1),0]) + ' ')
         #Write higher-order nodes
@@ -52,9 +53,10 @@ def writeGMSH(filename_base, ref, Q, TriFlag, E, V, nLE, NC, nWK, nWB, nr):
         f.write('\n')
       
     # Farfield inflow
-    BC = 2
+    Entity = 1
+    PhysicalBC = 1004
     for i in range(int((nWB-1)/Q)):
-        f.write(str(nbAirfoil+i+1) + ' ' + str(GmshLineType) + ' 2 ' + str(BC) + ' 0 ')
+        f.write(str(nbAirfoil+i+1) + ' ' + str(GmshLineType) + ' 2 ' + str(PhysicalBC) + ' ' + str(Entity) + ' ' )
         #Write end points
         f.write(str(NC[Q*i,nr-1]) + ' ' + str(NC[Q*(i+1),nr-1]) + ' ')
         #Write higher-order nodes
@@ -63,9 +65,10 @@ def writeGMSH(filename_base, ref, Q, TriFlag, E, V, nLE, NC, nWK, nWB, nr):
         f.write('\n')
 
     # Farfield Outflow
-    BC = 3
+    Entity = 2
+    PhysicalBC = 1004
     for i in range(int((nr-1)/Q)):
-        f.write(str(nbAirfoil+nbInflow+i+1) + ' ' + str(GmshLineType) + ' 2 ' + str(BC) + ' 0 ')
+        f.write(str(nbAirfoil+nbInflow+i+1) + ' ' + str(GmshLineType) + ' 2 ' + str(PhysicalBC) + ' ' + str(Entity) + ' ')
         #Write end points
         f.write(str(NC[0,Q*i]) + ' ' + str(NC[0,Q*(i+1)]) + ' ')
         #Write higher-order nodes
@@ -74,7 +77,7 @@ def writeGMSH(filename_base, ref, Q, TriFlag, E, V, nLE, NC, nWK, nWB, nr):
         f.write('\n')
         
     for i in range(int((nr-1)/Q)):
-        f.write(str(nbAirfoil+nbInflow+int(nbOutflow/2)+i+1) + ' ' + str(GmshLineType) + ' 2 ' + str(BC) + ' 0 ')
+        f.write(str(nbAirfoil+nbInflow+int(nbOutflow/2)+i+1) + ' ' + str(GmshLineType) + ' 2 ' + str(PhysicalBC) + ' ' + str(Entity) + ' ' )
         #Write end points
         f.write(str(NC[nWB-1,Q*i]) + ' ' + str(NC[nWB-1,Q*(i+1)]) + ' ')
         #Write higher-order nodes
@@ -92,10 +95,10 @@ def writeGMSH(filename_base, ref, Q, TriFlag, E, V, nLE, NC, nWK, nWB, nr):
     f.write('$EndElements\n')
     f.write('$PhysicalNames\n')
     f.write('4\n')
-    f.write('2 0 \"MeshInterior\"\n')
-    f.write('1 1 \"Wall\"\n')
-    f.write('1 2 \"Farfield Inflow\"\n')
-    f.write('1 3 \"Farfield Outflow\"\n')
+    f.write('2 4 \"MeshInterior\"\n')
+    f.write('1 0 \"Wall\"\n')
+    f.write('1 1 \"Farfield Inflow\"\n')
+    f.write('1 2 \"Farfield Outflow\"\n')
     f.write('$EndPhysicalNames\n')
     
     
@@ -134,8 +137,10 @@ def writeGMSH_Quad(f, nelem, nBCelem, Q, E):
         while nodemap[j] != k: j += 1
         nodemapinv.append(j)
     
+    Entity = 4
+    PhysicalBC = 9999
     for e in range(nelem):
-        f.write(str(nBCelem+e+1) + ' ' + str(GmshElemType) + ' 2 0 4 ')
+        f.write(str(nBCelem+e+1) + ' ' + str(GmshElemType) + ' 2 ' + str(PhysicalBC) + ' ' + str(Entity) + ' ')
         
         #Write nodes
         for k in range((Q+1)*(Q+1)):
