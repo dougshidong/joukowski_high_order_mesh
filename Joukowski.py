@@ -9,6 +9,8 @@ from ebg import writeEBG
 from geo import writeGEO
 from curve import writeCurve
 
+import sys, getopt
+
 from Joukowski_Challenge import make_joukowski_challenge
 
 import matplotlib.pyplot as plt
@@ -146,9 +148,28 @@ def writeNMF(fname, X, nLE, nWK, nWB, nr, sym):
 
 
 if __name__ == "__main__":
+    argv = sys.argv[1:];
+    inputfile = ''
+    outputfile = ''
 
     ref = 0
     Q = 3
+
+    try:
+       opts, args = getopt.getopt(argv,"hr:o:",["ifile=","ofile="])
+    except getopt.GetoptError as err:
+       #print 'test.py -r <inputfile> -o <outputfile>'
+       print(err)
+       sys.exit(2)
+    for opt, arg in opts:
+       if opt == '-h':
+          print('python Joukowski.py -r <numberofrefinements> -o <gridorder>')
+          sys.exit()
+       elif opt in ("-r", "--refine"):
+          ref = int(arg)
+       elif opt in ("-o", "--order"):
+          Q = int(arg)
+
     reynolds = 1000
     plt.clf()
     plt.axis('equal')
