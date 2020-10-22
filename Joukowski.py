@@ -156,7 +156,7 @@ if __name__ == "__main__":
     Q = 3
 
     try:
-       opts, args = getopt.getopt(argv,"hr:o:",["ifile=","ofile="])
+       opts, args = getopt.getopt(argv,"hr:o:",["refine=","order="])
     except getopt.GetoptError as err:
        #print 'test.py -r <inputfile> -o <outputfile>'
        print(err)
@@ -171,12 +171,16 @@ if __name__ == "__main__":
           Q = int(arg)
 
     reynolds = 1000
-    plt.clf()
-    plt.axis('equal')
+    #plt.clf()
+    #plt.axis('equal')
 
-    XC, YC = make_joukowski_challenge(ref, Q, reynolds)
+    #XC, YC = make_joukowski_challenge(ref, Q, reynolds)
+    #plt.pcolor(XC, YC, 0*XC, edgecolor='k', cmap='Greens')
+    ##XC, YC = make_joukowski_classic(ref, Q, reynolds)
+    ##plt.pcolor(XC, YC, 0*XC, edgecolor='r', cmap='Greens')
 
-    plt.pcolor(XC, YC, 0*XC, edgecolor='k', cmap='Greens')
+    #plt.show()
+    #plt.draw()
 
     TriFlag = False
     Distribution = 'Challenge'
@@ -184,10 +188,4 @@ if __name__ == "__main__":
     filename_base = 'jouk'
     make_joukowski(ref, Q, TriFlag, Distribution, FileFormat, reynolds, filename_base)
 
-    #XC, YC = make_joukowski_classic(ref, Q, reynolds)
-
-    #plt.pcolor(XC, YC, 0*XC, edgecolor='r', cmap='Greens')
-
-    plt.show()
-    plt.draw()
 
